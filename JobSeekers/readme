@@ -1,0 +1,7 @@
+I made a simple database with a couple of tables, 
+made connections between the tables, 
+and filled them with pseudo-real data. 
+Brought the base close to the real prototype
+
+After creating the database, I went to www.mockaroo.com, where I created 4 .csv files filled with random data.
+Then using the COPY command, which is part of postgresql, I imported the data from the .csv files into my tables
