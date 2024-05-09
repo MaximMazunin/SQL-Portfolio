@@ -1,4 +1,4 @@
---creating database
+--creating database in PostgreSQL using PgAdmin
 
 CREATE TABLE companies (
     company_id serial,
