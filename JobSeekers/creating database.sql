@@ -74,3 +74,40 @@ FROM 'E:\MOCK_applications.csv'
 DELIMITER ',' 
 CSV HEADER;
 
+--updating the 'applications' table adds 2 columns 'application_date' and 'decision_date' for better work with the database
+
+ALTER TABLE applications
+ADD COLUMN application_date TIMESTAMP,
+ADD COLUMN decision_date TIMESTAMP;
+
+--then I used a random function to fill those columns 
+
+UPDATE applications
+SET 
+    application_date = 
+        CASE 
+            WHEN application_status IN ('approved', 'rejected') THEN
+                CURRENT_DATE - INTERVAL '90 days' - (random() * INTERVAL '60 days')
+            WHEN application_status = 'on hold' THEN
+                CURRENT_DATE - INTERVAL '30 days' - (random() * INTERVAL '60 days')
+            WHEN application_status = 'withdrawn' THEN
+                CURRENT_DATE - INTERVAL '365 days' - (random() * INTERVAL '90 days')
+            WHEN application_status = 'pending' THEN
+                CURRENT_DATE - INTERVAL '30 days' - (random() * INTERVAL '60 days')
+            ELSE NULL
+        END;
+--I closed the last update and added another one so that the data is filled in correctly one by one
+UPDATE test
+SET
+    decision_date = 
+        CASE 
+            WHEN application_status IN ('approved', 'rejected') THEN
+                application_date + INTERVAL '60 days' + (random() * INTERVAL '30 days')
+            WHEN application_status = 'on hold' THEN
+                CURRENT_DATE + INTERVAL '10 days' + (random() * INTERVAL '30 days')
+            WHEN application_status = 'withdrawn' THEN
+                application_date + INTERVAL '30 days' + (random() * INTERVAL '60 days')
+            WHEN application_status = 'pending' THEN
+                CURRENT_DATE + INTERVAL '10 days' + (random() * INTERVAL '30 days')
+            ELSE NULL
+        END;
