@@ -97,6 +97,7 @@ SET
             ELSE NULL
         END;
 --I closed the last update and added another one so that the data is filled in correctly one by one
+
 UPDATE test
 SET
     decision_date = 
@@ -111,3 +112,23 @@ SET
                 CURRENT_DATE + INTERVAL '10 days' + (random() * INTERVAL '30 days')
             ELSE NULL
         END;
+
+-- created a query that returns basic information
+
+SELECT
+    apl.applicant_id
+	, c.company_id
+	, j.job_id
+	, apl.full_name
+	, j.title
+	, c.company_name
+	, apt.application_status
+	, apt.decision_date
+FROM
+	applications AS apt
+	INNER JOIN applicants AS apl
+		ON apt.applicant_id = apl.applicant_id
+	INNER JOIN jobs AS j
+		ON apt.job_id = j.job_id
+	INNER JOIN companies AS c
+        ON j.company_id = c.company_id;
